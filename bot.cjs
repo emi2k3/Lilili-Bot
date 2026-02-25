@@ -1,7 +1,7 @@
 const dotenv = require("dotenv");
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, GatewayIntentBits, REST, Routes} = require('discord.js');
+const { Client, GatewayIntentBits, REST, Routes} = require('discord.js');
 
 
 dotenv.config()
@@ -16,7 +16,6 @@ const client = new Client({
    
 );
 
-client.commands =new Collection();
 // Comandos
 const commands = [];
 const foldersPath = path.join(__dirname, 'commands');
@@ -28,8 +27,6 @@ for (const folder of commandFolders) {
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
 		const command = require(filePath);	
-		console.log(command);
-		client.commands.set(command.data.name, command);
 		commands.push(command.data.toJSON()); 
 	}
 }
@@ -62,7 +59,7 @@ for (const file of eventFiles) {
 	if (event.once) {
 		client.once(event.name, (...args) => event.execute(...args));
 	} else {
-		client.on(event.name, (...args) => event.execute(...args));
+		client.on(event.name, (...args) => event.execute(...args)); // ...args?
 	}
 }
 

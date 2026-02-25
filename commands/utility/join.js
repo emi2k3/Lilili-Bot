@@ -1,4 +1,4 @@
-const { joinVoiceChannel, VoiceConnectionStatus, entersState } = require("@discordjs/voice");
+const { joinVoiceChannel } = require("@discordjs/voice");
 const { ChannelType,SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
@@ -19,6 +19,6 @@ module.exports = {
             guildId: channel.guild.id,
             adapterCreator: channel.guild.voiceAdapterCreator,
         })
-        interaction.reply("Ahí voy wacho")
+        interaction.reply("Ahí voy wacho.");
 	},
 };
