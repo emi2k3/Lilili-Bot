@@ -1,4 +1,9 @@
-const { joinVoiceChannel } = require("@discordjs/voice");
+const {
+  joinVoiceChannel,
+  SpeakingMap,
+  AudioReceiveStream,
+  EndBehaviorType,
+} = require("@discordjs/voice");
 const { ChannelType, SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
@@ -14,11 +19,20 @@ module.exports = {
     ),
   async execute(interaction) {
     const channel = interaction.options.getChannel("channel");
-    voiceConnection = joinVoiceChannel({
+    const voiceConnection = joinVoiceChannel({
       channelId: channel.id,
       guildId: channel.guild.id,
       adapterCreator: channel.guild.voiceAdapterCreator,
       selfDeaf: false,
+    });
+
+    voiceConnection.receiver.speaking.on("start", (userID) => {
+      const opusStream = voiceConnection.receiver.subscribe(userID, {
+        end: {
+          behavior: EndBehaviorType.AfterSilence,
+        },
+      });
+      opusStream.on("end");
     });
     interaction.reply("Ahí voy wacho.");
   },
